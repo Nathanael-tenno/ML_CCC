@@ -1,1 +1,1 @@
-Fail
+ const currentDate = new Date().toISOString().replace(/[-:.]/g, '');

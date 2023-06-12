@@ -32,8 +32,10 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 
   try {
     const bucket = admin.storage().bucket();
-    const uniqueFilename = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const currentDate = new Date().toISOString().replace(/[-:.]/g, ''); // Remove dashes, colons, and periods from the current date
+    const uniqueFilename = currentDate + '-' + req.file.originalname; // Replace 'your_custom_name' with the desired name for the file
     const fileUpload = bucket.file(uniqueFilename);
+
 
     // Create a write stream to write the file data to Firebase Storage
     const stream = fileUpload.createWriteStream({
