@@ -13,11 +13,11 @@ RUN npm install
 # Install Python and required Python libraries
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
-    pip3 install opencv-python torch numpy tensorflow tensorflow_hub
+    pip3 install --no-cache-dir opencv-python torch numpy tensorflow tensorflow_hub
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt ./
-RUN pip install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code to the container
 COPY . .
