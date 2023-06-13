@@ -5,26 +5,40 @@ const axios = require('axios');
 const multer = require("multer");
 const admin = require('firebase-admin');
 const { Firestore } = require("@google-cloud/firestore");
-
-
+const { Storage } = require("@google-cloud/storage");
+const { spawn } = require('child_process');
 
 const serviceAccount = require('./serviceAccountKey.json');
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'capstone-389205.appspot.com' // Firebase Storage bucket URL
+  storageBucket: "gs://capstone-389205.appspot.com"
+});
+
+const db = new Firestore({
+  projectId: serviceAccount.project_id,
+  credentials: {
+    client_email: serviceAccount.client_email,
+    private_key: serviceAccount.private_key,
+  },
+});
+
+const storage = new Storage({
+  projectId: serviceAccount.project_id,
+  credentials: {
+    client_email: serviceAccount.client_email,
+    private_key: serviceAccount.private_key,
+  },
 });
 
 app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true }));
 
-// Set up multer storage configuration
-const storage = multer.memoryStorage(); // Store file in memory
+const multerStorage = multer.memoryStorage();
+const upload = multer({ storage: multerStorage });
 
-//storage configuration
-const upload = multer({ storage: storage });
-
-//  route to handle image uploads
 app.post('/upload', upload.single('image'), async (req, res) => {
-  const file = req.file; // Get the uploaded file
+  const file = req.file;
 
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
@@ -32,34 +46,46 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 
   try {
     const bucket = admin.storage().bucket();
-    const currentDate = new Date().toISOString().replace(/[-:.]/g, ''); // Remove dashes, colons, and periods from the current date
-    const uniqueFilename = currentDate + '-' + req.file.originalname; // Replace 'your_custom_name' with the desired name for the file
+    const currentDate = new Date().toISOString().replace(/[-:.]/g, '');
+    const uniqueFilename = currentDate + '-' + req.file.originalname;
     const fileUpload = bucket.file(uniqueFilename);
+    const filePath = `${uniqueFilename}`;
 
 
-    // Create a write stream to write the file data to Firebase Storage
-    const stream = fileUpload.createWriteStream({
-      metadata: {
-        contentType: file.mimetype
+    await fileUpload.save(file.buffer, {
+      contentType: file.mimetype,
+    });
+
+    const signedUrl = `https://storage.googleapis.com/capstone-389205.appspot.com/${filePath}`;
+
+    const photoData = {
+      url: signedUrl,
+    };
+    const docRef = await db.collection("file").add(photoData);
+
+    const pythonProcess = spawn("python", ["app.py", signedUrl]);
+
+    let prediction = "";
+    let errorOutput = "";
+
+    pythonProcess.stdout.on("data", (data) => {
+      prediction += data.toString();
+    });
+
+    pythonProcess.stderr.on("data", (data) => {
+      errorOutput += data.toString();
+    });
+
+    pythonProcess.on("close", async (code) => {
+      console.log(`Child process exited with code ${code}`);
+
+      if (code === 0) {
+        prediction = prediction.replace(/\r?\n|\r/g, "");
+        res.send({ prediction, imageUrl: signedUrl });
+      } else {
+        res.status(500).json({ error: "Internal server error", errorOutput });
       }
     });
-
-
-
-    // Handle stream errors
-    stream.on('error', (error) => {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to upload image' });
-    });
-
-    // Handle stream finish event
-    stream.on('finish', () => {
-      // File upload is complete
-      res.json({ success: 'image berhasil diupload' });
-    });
-
-    // Pipe the file data into the write stream
-    stream.end(file.buffer);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to upload image' });
