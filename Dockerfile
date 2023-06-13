@@ -1,26 +1,37 @@
-# Use the official Node.js image as the base image
+# Base image
 FROM node:14
 
-# Set the working directory in the container
+# Create and set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the working directory
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Install additional dependencies for cv2
-RUN apt-get update && apt-get install -y libsm6 libxext6 libxrender-dev libglib2.0-0 python3-pip
+# Copy the server.js file
+COPY server.js .
 
-# Install cv2
-RUN pip3 install opencv-python-headless
+# Copy the serviceAccountKey.json file
+COPY serviceAccountKey.json .
 
-# Copy the source code to the working directory
-COPY . .
+# Copy the app.py file
+COPY app.py .
 
-# Expose port 80
+# Install Python and required packages
+RUN apt-get update && \
+    apt-get install -y python3 && \
+    apt-get install -y python3-pip && \
+    pip3 install opencv-python-headless && \
+    pip3 install torch && \
+    pip3 install numpy && \
+    pip3 install tensorflow && \
+    pip3 install tensorflow_hub && \
+    pip3 install requests
+
+# Expose the desired port
 EXPOSE 80
 
-# Start the application
-CMD ["node", "server.js"]
+# Run the server.js file
+CMD [ "node", "server.js" ]
