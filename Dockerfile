@@ -13,12 +13,6 @@ RUN npm install
 # Install Python 3 and its dependencies
 RUN apt-get update && apt-get install -y python3 python3-pip
 
-# Install pip
-RUN python -m ensurepip --default-pip
-
-# Install PyTorch
-RUN pip install torch torchvision torchaudio
-
 # Upgrade pip for Python 3
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 
