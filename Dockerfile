@@ -13,7 +13,7 @@ RUN npm install
 # Install Python and required Python libraries
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
-    pip3 install --no-cache-dir opencv-python torch numpy tensorflow tensorflow_hub
+    pip3 install --no-cache-dir opencv-python torch numpy==1.19.3 tensorflow tensorflow_hub scikit-build
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt ./
