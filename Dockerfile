@@ -19,7 +19,7 @@ RUN pip3 install opencv-python torch numpy tensorflow tensorflow_hub
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install -r reqruitments.txt
 
 
 # Expose port 80 for the application
