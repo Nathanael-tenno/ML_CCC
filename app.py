@@ -1,9 +1,9 @@
 import torch
-import cv2
+import requests
 import numpy as np
+import cv2
 import tensorflow as tf
 import tensorflow_hub as hub
-import requests
 import urllib
 
 # model loading
