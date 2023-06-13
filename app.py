@@ -51,13 +51,13 @@ def predict(url):
     freshness_level = label_classes[index]
     freshness.append(freshness_level)
 
-  return ({"name": fruit_name, "freshness": freshness})   
+ return ({"name": fruit_name, "freshness": freshness})   
     
 if __name__ == "__main__":
   import sys
   try:  
-  if len(sys.argv) < 2:
-      print("get output <url>")
+    if len(sys.argv) < 2:
+      print("input url image : pyhton app.py [image_url]")
       sys.exit(1)
     
     url = sys.argv[1]
