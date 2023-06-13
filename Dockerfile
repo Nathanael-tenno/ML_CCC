@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the rest of the application code to the container
 COPY . .
@@ -26,4 +26,4 @@ COPY . .
 EXPOSE 80
 
 # Start the application
-CMD [ "node", "server.js" ]
+CMD [ "node", "server.js", "npm", "run", "start" ]
