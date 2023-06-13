@@ -10,17 +10,17 @@ COPY package*.json ./
 # Install Node.js dependencies
 RUN npm install
 
-# Copy the rest of the application code to the container
-COPY . .
-
-# Install Python dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN pip3 install opencv-python torch numpy tensorflow tensorflow_hub
+# Install Python and required Python libraries
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    pip3 install opencv-python torch numpy tensorflow tensorflow_hub
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt ./
 RUN pip install -r reqruitments.txt
 
+# Copy the rest of the application code to the container
+COPY . .
 
 # Expose port 80 for the application
 EXPOSE 80
