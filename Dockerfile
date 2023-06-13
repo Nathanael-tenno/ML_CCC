@@ -1,37 +1,29 @@
-# Base image
+# Use the official Node.js 14 image as the base image
 FROM node:14
 
-# Create and set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
-# Install dependencies
+# Install Node.js dependencies
 RUN npm install
 
-# Copy the server.js file
-COPY server.js .
+# Copy the rest of the application code to the container
+COPY . .
 
-# Copy the serviceAccountKey.json file
-COPY serviceAccountKey.json .
+# Install Python dependencies
+RUN apt-get update && apt-get install -y python3 python3-pip
+RUN pip3 install opencv-python torch numpy tensorflow tensorflow_hub
 
-# Copy the app.py file
-COPY app.py .
+# Copy requirements.txt and install Python dependencies
+COPY requirements.txt ./
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Install Python and required packages
-RUN apt-get update && \
-    apt-get install -y python3 && \
-    apt-get install -y python3-pip && \
-    pip3 install opencv-python-headless && \
-    pip3 install torch && \
-    pip3 install numpy && \
-    pip3 install tensorflow && \
-    pip3 install tensorflow_hub && \
-    pip3 install requests
 
-# Expose the desired port
+# Expose port 80 for the application
 EXPOSE 80
 
-# Run the server.js file
-CMD [ "node", "server.js" ]
+# Start the application
+CMD [ "node", "app.js" ]
