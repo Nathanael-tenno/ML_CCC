@@ -1,29 +1,19 @@
-# Base image
+# Use the official Node.js image as the base image
 FROM node:14
 
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy the package.json and package-lock.json files to the working directory
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Install Python 3 and its dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip
-
-# Upgrade pip for Python 3
-RUN python3 -m pip install --no-cache-dir --upgrade pip
-
-# Copy requirements.txt and install Python dependencies
-COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Copy source code
+# Copy the source code to the working directory
 COPY . .
 
-# Expose the port your application is running on
+# Expose port 80
 EXPOSE 80
 
 # Start the application
