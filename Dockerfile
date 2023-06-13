@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt ./
-RUN pip install -r reqruitments.txt
+RUN pip install -r requirements.txt
 
 # Copy the rest of the application code to the container
 COPY . .
