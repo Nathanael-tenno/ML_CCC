@@ -26,4 +26,4 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 EXPOSE 80
 
 # Start the application
-CMD [ "node", "app.js" ]
+CMD [ "node", "server.js" ]
