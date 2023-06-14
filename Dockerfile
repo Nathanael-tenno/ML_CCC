@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./
+COPY package*.json .
 
 # Install Node.js dependencies
 RUN npm install
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y python3 python3-pip
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 
 # Copy requirements.txt and install Python dependencies
-COPY requirements.txt ./
+COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code to the container
