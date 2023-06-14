@@ -1,6 +1,6 @@
 numpy
 torch
 tensorflow
+opencv-python
 tensorflow-hub
-opencv-python==4.7.0.72
 urllib3
