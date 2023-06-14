@@ -24,8 +24,8 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code to the container
 COPY . .
 
-# Expose port 80 for the application
-EXPOSE 80
+# Expose port 5000 for the application
+EXPOSE 5000
 
 # Start the application
 CMD [ "node", "server.js", "npm", "run", "start" ]
