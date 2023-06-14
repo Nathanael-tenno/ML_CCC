@@ -51,7 +51,7 @@ def predict(url):
     freshness_level = label_classes[index]
     freshness.append(freshness_level)
 
- return ({"name": fruit_name, "freshness": freshness})   
+  return ({"name": fruit_name, "freshness": freshness})   
     
 if __name__ == "__main__":
   import sys
