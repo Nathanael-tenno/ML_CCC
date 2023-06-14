@@ -63,7 +63,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     };
     const docRef = await db.collection("file").add(photoData);
 
-    const pythonProcess = spawn("python", ["app.py", signedUrl]);
+    const pythonProcess = spawn("/usr/bin/python", [__dirname + "/app.py", signedUrl]);
 
     let prediction = "";
     let errorOutput = "";
@@ -92,6 +92,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-app.listen(80, () => {
-  console.log(`Server running on port 80`);
+app.listen(5000, () => {
+  console.log(`Server running on port 5000`);
 });
