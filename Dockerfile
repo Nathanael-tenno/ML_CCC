@@ -1,7 +1,7 @@
 # Base image
 FROM node:14
 
-# Create and set the working directory
+# Set working directory
 WORKDIR /app
 
 # Copy package.json and package-lock.json
@@ -10,28 +10,21 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the server.js file
-COPY server.js .
+# Install Python 3 and its dependencies
+RUN apt-get update && apt-get install -y python3 python3-pip
 
-# Copy the serviceAccountKey.json file
-COPY serviceAccountKey.json .
+# Upgrade pip for Python 3
+RUN python3 -m pip install --no-cache-dir --upgrade pip
 
-# Copy the app.py file
-COPY app.py .
+# Copy requirements.txt and install Python dependencies
+COPY requirements.txt ./
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Install Python and required packages
-RUN apt-get update && \
-    apt-get install -y python3 && \
-    apt-get install -y python3-pip && \
-    pip3 install opencv-python-headless && \
-    pip3 install torch && \
-    pip3 install numpy && \
-    pip3 install tensorflow && \
-    pip3 install tensorflow_hub && \
-    pip3 install requests
+# Copy source code
+COPY . .
 
-# Expose the desired port
+# Expose the port your application is running on
 EXPOSE 80
 
-# Run the server.js file
-CMD [ "node", "server.js" ]
+# Start the application
+CMD ["node", "server.js"]
