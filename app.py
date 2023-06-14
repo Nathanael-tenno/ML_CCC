@@ -55,12 +55,14 @@ def predict(url):
     
 if __name__ == "__main__":
   import sys
-  
-  if len(sys.argv) < 2:
-    print("get output <url>")
-    sys.exit(1)
-  
-  url = sys.argv[1]
-  output = predict(url)
-  
-  print(output)
+  try:  
+    if len(sys.argv) < 2:
+      print("input url image : pyhton app.py [image_url]")
+      sys.exit(1)
+    
+    url = sys.argv[1]
+    output = predict(url)
+  except Exception as err:
+    print(err)
+  else:
+    print(output)
