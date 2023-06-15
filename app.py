@@ -6,7 +6,7 @@ import cv2
 import requests
 import urllib
 
-# model loading
+# model loadinggg
 classification_model = tf.keras.models.load_model(
     'model/model.h5',
     custom_objects={'KerasLayer':hub.KerasLayer}
