@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+=======
+import numpy as np
+import torch
+import tensorflow as tf
+import tensorflow_hub as hub
+import cv2
+>>>>>>> cad3c2b82a9510dd54a105c43ebee7a64adf8702
 import requests
 from io import BytesIO
 
@@ -15,6 +23,15 @@ input_shape = input_details[0]["shape"]
 output_shape = output_details[0]["shape"]
 
 
+<<<<<<< HEAD
+=======
+# model loadinggg
+classification_model = tf.keras.models.load_model(
+    'model/model.h5',
+    custom_objects={'KerasLayer':hub.KerasLayer}
+)
+object_detection_model= torch.hub.load('ultralytics/yolov5', 'custom', 'model/model_v3_1_0.pt')
+>>>>>>> cad3c2b82a9510dd54a105c43ebee7a64adf8702
 
 label_classes = ['freshapples','freshbanana','freshoranges','rottenapples','rottenbanana','rottenoranges']
 
@@ -50,6 +67,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
+<<<<<<< HEAD
         print("Usage: python app.py <image_url>")
         sys.exit(1)
 
@@ -57,3 +75,14 @@ if __name__ == "__main__":
     prediction = predict(image_url)
 
     print(prediction)
+=======
+      print("input url image : pyhton app.py [image_url]")
+      sys.exit(1)
+    
+    url = sys.argv[1]
+    output = predict(url)
+  except Exception as err:
+    print(err)
+  else:
+    print(output)
+>>>>>>> cad3c2b82a9510dd54a105c43ebee7a64adf8702

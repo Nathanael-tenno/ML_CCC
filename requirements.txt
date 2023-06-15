@@ -1,3 +1,10 @@
 tensorflow
+<<<<<<< HEAD
 numpy
 Pillow
+=======
+tensorflow-hub
+opencv-python-headless
+urllib3
+pandas
+>>>>>>> cad3c2b82a9510dd54a105c43ebee7a64adf8702
