@@ -1,8 +1,8 @@
-import cv2
-import torch
 import numpy as np
+import torch
 import tensorflow as tf
 import tensorflow_hub as hub
+import cv2
 import requests
 import urllib
 
