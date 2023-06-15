@@ -63,11 +63,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     };
     const docRef = await db.collection("file").add(photoData);
 
-<<<<<<< HEAD
     const pythonProcess = spawn("python",  ["app.py", signedUrl]);
-=======
-    const pythonProcess = spawn("python", ["app.py", signedUrl]);
->>>>>>> cad3c2b82a9510dd54a105c43ebee7a64adf8702
 
     let prediction = "";
     let errorOutput = "";
