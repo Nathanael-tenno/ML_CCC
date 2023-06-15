@@ -28,4 +28,4 @@ EXPOSE 5000
 
 # Start the application
 
-CMD [ "node", "server.js", "npm", "run", "start" ]
+CMD [ "node", "server.js" ]
